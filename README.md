@@ -46,13 +46,15 @@ Supported model providers include OpenAI-compatible APIs, Anthropic Claude, Code
 
 ## Configuration
 
-Create a local `.env` file from the template:
+The easiest way to configure the app is through the web console after the backend is running. Open the configuration panel in the browser to save mailbox, SMTP, email fetch, classification, model/provider, concurrency, and agent behavior settings. The backend stores those values in a local `.env` file.
+
+If you prefer to pre-fill settings manually, create `.env` from the template:
 
 ```bash
 cp .env.example .env
 ```
 
-Edit `.env` with your mailbox and model API key. Important values include:
+Then edit `.env` with your mailbox and model API key. Important values include:
 
 ```env
 EMAIL_ADDRESS=you@example.com
@@ -68,7 +70,7 @@ SMTP_AUTH_CODE=your-smtp-app-password
 LLM_API_KEY=your-llm-api-key
 ```
 
-Provider and model fields are optional. Leave them unset to use defaults, or set `LLM_PROVIDER` to an alias such as `codex`, `claude`, `gemini` or `deepseek` when you want a specific provider.
+Provider and model fields are optional. Leave them unset to use defaults, set them in `.env`, or change them from the web console. `LLM_PROVIDER` accepts aliases such as `codex`, `deepseek`, `qwen`, `kimi`, `claude`, or `gemini`.
 
 Never commit `.env`, API keys, app passwords, logs, raw email content, or generated outputs.
 
@@ -88,13 +90,27 @@ Start the API:
 .venv/bin/python -m uvicorn main:app --reload --host 127.0.0.1 --port 8000
 ```
 
-Open `Fronted/index.html` in a browser. The frontend expects the API at:
+After the backend is running, open the static frontend directly in a browser:
 
 ```text
-http://127.0.0.1:8000
+Fronted/index.html
 ```
 
-From the console you can save configuration, test IMAP/SMTP, run summaries, review classified emails, generate drafts, edit drafts, and send approved replies.
+No frontend build step or frontend dev server is required. If your shell is still inside the `backend` directory, the file is at:
+
+```text
+../Fronted/index.html
+```
+
+The frontend calls API endpoints on the backend at `http://127.0.0.1:8000`. To check that the backend is running, open:
+
+```text
+http://127.0.0.1:8000/health
+```
+
+Do not use `http://127.0.0.1:8000` as the browser UI. The API root has no route and returns `{"detail":"Not Found"}`. Open `Fronted/index.html` for the web console instead.
+
+From the console you can save and update configuration, test IMAP/SMTP, run summaries, review classified emails, generate drafts, edit drafts, and send approved replies. Use the gear button to reopen configuration at any time.
 
 ## Run From the CLI
 
