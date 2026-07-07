@@ -2,7 +2,6 @@ import pytest
 
 from email_draft_agent.config import config_from_env
 
-
 def test_config_from_env_defaults():
     config = config_from_env({})
 
@@ -20,7 +19,6 @@ def test_config_from_env_defaults():
     assert config.draft_personality == ""
     assert config.log_level == "INFO"
     assert config.draft_log_file == "logs/task_{task_id}/email_draft_agent.log"
-
 
 def test_config_from_env_parses_values():
     config = config_from_env(
@@ -59,11 +57,9 @@ def test_config_from_env_parses_values():
     assert config.log_level == "DEBUG"
     assert config.draft_log_file == "tmp/draft.log"
 
-
 def test_config_rejects_invalid_log_level():
     with pytest.raises(RuntimeError, match="LOG_LEVEL"):
         config_from_env({"LOG_LEVEL": "verbose"})
-
 
 def test_config_from_env_supports_legacy_deepseek_aliases():
     config = config_from_env({"DEEPSEEK_API_KEY": "key", "BASE_URL": "https://legacy.example.com", "DEEPSEEK_DRAFT_MODEL": "legacy-draft"})
@@ -73,6 +69,11 @@ def test_config_from_env_supports_legacy_deepseek_aliases():
     assert config.llm_base_url == "https://legacy.example.com"
     assert config.llm_draft_model == "legacy-draft"
 
+
+def test_config_from_env_supports_codex_alias():
+    config = config_from_env({"LLM_PROVIDER": "codex"})
+
+    assert config.llm_provider == "openai_compatible"
 
 def test_config_rejects_invalid_llm_provider():
     with pytest.raises(RuntimeError, match="LLM_PROVIDER"):

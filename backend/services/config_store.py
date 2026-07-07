@@ -32,6 +32,7 @@ LLM_PROVIDER_ALIASES = {
     "openai-compatible": "openai_compatible",
     "openai_compatible": "openai_compatible",
     "custom": "openai_compatible",
+    "codex": "openai_compatible",
     "deepseek": "openai_compatible",
     "qwen": "openai_compatible",
     "kimi": "openai_compatible",

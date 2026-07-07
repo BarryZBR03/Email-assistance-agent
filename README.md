@@ -42,7 +42,7 @@ These directories are ignored by Git and should not be committed.
 - SMTP access if you want to send approved drafts
 - An LLM API key for a supported provider
 
-Supported model providers include OpenAI-compatible APIs, Anthropic, and Google Gemini. Provider aliases such as DeepSeek, Qwen, Kimi, Claude, and Gemini are supported by the app configuration.
+Supported model providers include OpenAI-compatible APIs, Anthropic Claude, Codex/OpenAI, and Google Gemini. Provider aliases such as Codex, DeepSeek, Qwen, Kimi, Claude, and Gemini are supported by the app configuration.
 
 ## Configuration
 
@@ -52,7 +52,7 @@ Create a local `.env` file from the template:
 cp .env.example .env
 ```
 
-Edit `.env` with your mailbox and model settings. Important values include:
+Edit `.env` with your mailbox and model API key. Important values include:
 
 ```env
 EMAIL_ADDRESS=you@example.com
@@ -65,13 +65,10 @@ SMTP_HOST=smtp.example.com
 SMTP_PORT=465
 SMTP_AUTH_CODE=your-smtp-app-password
 
-LLM_PROVIDER=openai_compatible
 LLM_API_KEY=your-llm-api-key
-LLM_BASE_URL=https://api.deepseek.com
-LLM_CLASSIFICATION_MODEL=deepseek-v4-flash
-LLM_SUMMARY_MODEL=deepseek-v4-pro
-LLM_DRAFT_MODEL=deepseek-v4-pro
 ```
+
+Provider and model fields are optional. Leave them unset to use defaults, or set `LLM_PROVIDER` to an alias such as `codex`, `claude`, or `gemini` when you want a specific provider.
 
 Never commit `.env`, API keys, app passwords, logs, raw email content, or generated outputs.
 

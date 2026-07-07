@@ -69,7 +69,6 @@ def test_save_config_requires_all_fields_before_testing(monkeypatch, tmp_path):
     assert calls == []
     assert not env_path.exists()
 
-
 def test_config_status_returns_values_without_secrets(monkeypatch, tmp_path):
     env_path = tmp_path / ".env"
     env_path.write_text(
@@ -165,7 +164,6 @@ def test_save_config_replaces_secret_when_new_value_provided(monkeypatch, tmp_pa
     assert "LLM_API_KEY=new-llm" in content
     assert "DEEPSEEK_API_KEY=new-llm" in content
 
-
 def test_config_status_falls_back_to_legacy_deepseek_settings(monkeypatch, tmp_path):
     env_path = tmp_path / ".env"
     env_path.write_text(
@@ -184,6 +182,15 @@ def test_config_status_falls_back_to_legacy_deepseek_settings(monkeypatch, tmp_p
     assert status["values"]["LLM_SUMMARY_MODEL"] == "legacy-summary"
     assert status["values"]["LLM_DRAFT_MODEL"] == "legacy-draft"
 
+
+def test_config_status_supports_codex_alias(monkeypatch, tmp_path):
+    env_path = tmp_path / ".env"
+    env_path.write_text("LLM_PROVIDER=codex\n", encoding="utf-8")
+    monkeypatch.setattr(config_store, "ENV_PATH", env_path)
+
+    status = config_store.config_status()
+
+    assert status["values"]["LLM_PROVIDER"] == "openai_compatible"
 
 def test_save_config_writes_base_url_and_legacy_alias(monkeypatch, tmp_path):
     env_path = tmp_path / ".env"

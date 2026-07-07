@@ -10,7 +10,6 @@ def base_env():
         "IMAP_AUTH_CODE": "secret",
     }
 
-
 def test_config_from_env_defaults():
     config = config_from_env(base_env())
 
@@ -27,7 +26,6 @@ def test_config_from_env_defaults():
     assert config.summary_system_prompt == ""
     assert config.log_level == "INFO"
     assert config.log_file == "logs/task_{task_id}/email_summary_agent.log"
-
 
 def test_config_from_env_parses_values():
     env = {
@@ -67,7 +65,6 @@ def test_config_from_env_parses_values():
     assert config.log_level == "DEBUG"
     assert config.log_file == "tmp/run.log"
 
-
 def test_config_requires_imap_credentials():
     with pytest.raises(RuntimeError, match="Missing IMAP_HOST"):
         config_from_env({})
@@ -78,7 +75,6 @@ def test_config_rejects_invalid_recent_days(value):
     with pytest.raises(RuntimeError):
         config_from_env({**base_env(), "RECENT_DAYS": value})
 
-
 def test_config_rejects_invalid_email_status():
     with pytest.raises(RuntimeError, match="EMAIL_STATUS"):
         config_from_env({**base_env(), "EMAIL_STATUS": "archived"})
@@ -88,11 +84,9 @@ def test_parse_categories_defaults_and_adds_other():
     assert "other" in parse_categories("")
     assert parse_categories("work,personal") == ("work", "personal", "other")
 
-
 def test_config_rejects_invalid_log_level():
     with pytest.raises(RuntimeError, match="LOG_LEVEL"):
         config_from_env({**base_env(), "LOG_LEVEL": "verbose"})
-
 
 def test_config_from_env_supports_legacy_deepseek_aliases():
     config = config_from_env({**base_env(), "DEEPSEEK_API_KEY": "key", "BASE_URL": "https://legacy.example.com", "DEEPSEEK_MODEL": "legacy-classifier", "DEEPSEEK_SUMMARY_MODEL": "legacy-summary"})
@@ -103,6 +97,11 @@ def test_config_from_env_supports_legacy_deepseek_aliases():
     assert config.llm_classification_model == "legacy-classifier"
     assert config.llm_summary_model == "legacy-summary"
 
+
+def test_config_from_env_supports_codex_alias():
+    config = config_from_env({**base_env(), "LLM_PROVIDER": "codex"})
+
+    assert config.llm_provider == "openai_compatible"
 
 def test_config_rejects_invalid_llm_provider():
     with pytest.raises(RuntimeError, match="LLM_PROVIDER"):

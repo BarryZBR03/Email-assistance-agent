@@ -81,6 +81,7 @@
                 <label>Provider
                   <select name="LLM_PROVIDER" id="llmProvider">
                     <option value="deepseek">DeepSeek</option>
+                    <option value="codex">Codex</option>
                     <option value="openai">OpenAI</option>
                     <option value="qwen">Qwen</option>
                     <option value="kimi">Kimi</option>
@@ -91,8 +92,8 @@
                 </label>
                 <label data-base-url-field>Base URL<input name="LLM_BASE_URL" placeholder="https://api.deepseek.com or OpenAI-compatible endpoint" /></label>
                 <label>Classification model<input name="LLM_CLASSIFICATION_MODEL" placeholder="deepseek-v4-flash" /></label>
-                <label>Summary model<input name="LLM_SUMMARY_MODEL" placeholder="deepseek-v4-pro" /></label>
-                <label>Draft model<input name="LLM_DRAFT_MODEL" placeholder="deepseek-v4-pro" /></label>
+                <label>Summary model<input name="LLM_SUMMARY_MODEL" placeholder="Optional" /></label>
+                <label>Draft model<input name="LLM_DRAFT_MODEL" placeholder="Optional" /></label>
                 <label>Classification concurrency<input name="LLM_CLASSIFICATION_MAX_CONCURRENCY" inputmode="numeric" placeholder="1000" /></label>
                 <label>Draft concurrency<input name="LLM_DRAFT_MAX_CONCURRENCY" inputmode="numeric" placeholder="250" /></label>
                 <label class="wide-field">LLM API key<input name="LLM_API_KEY" type="password" autocomplete="off" data-secret="LLM_API_KEY" /></label>

@@ -1,7 +1,7 @@
 from pathlib import Path
 
 
-REQUIRED_ENV_KEYS = {
+DOCUMENTED_ENV_KEYS = {
     "CLASSIFIED_EMAILS_DIR",
     "DRAFT_OUTPUT_DIR",
     "DEEPSEEK_API_KEY",
@@ -25,5 +25,5 @@ REQUIRED_ENV_KEYS = {
 def test_env_example_documents_draft_agent_keys():
     content = Path("../.env.example").read_text(encoding="utf-8")
 
-    for key in REQUIRED_ENV_KEYS:
+    for key in DOCUMENTED_ENV_KEYS:
         assert f"{key}=" in content

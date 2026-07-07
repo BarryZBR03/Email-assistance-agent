@@ -61,6 +61,7 @@ const els = {
 
 const providerConfigs = {
   deepseek: { adapter: "openai_compatible", baseUrl: "https://api.deepseek.com", classification: "deepseek-v4-flash", summary: "deepseek-v4-pro", draft: "deepseek-v4-pro" },
+  codex: { adapter: "openai_compatible", baseUrl: "https://api.openai.com/v1", classification: "gpt-4.1-mini", summary: "gpt-4.1", draft: "gpt-4.1" },
   openai: { adapter: "openai_compatible", baseUrl: "https://api.openai.com/v1", classification: "gpt-4.1-mini", summary: "gpt-4.1", draft: "gpt-4.1" },
   qwen: { adapter: "openai_compatible", baseUrl: "https://dashscope.aliyuncs.com/compatible-mode/v1", classification: "qwen-plus", summary: "qwen-plus", draft: "qwen-plus" },
   kimi: { adapter: "openai_compatible", baseUrl: "https://api.moonshot.cn/v1", classification: "kimi-k2-0711-preview", summary: "kimi-k2-0711-preview", draft: "kimi-k2-0711-preview" },
@@ -146,6 +147,7 @@ function inferProvider(values) {
   const baseUrl = String(values.LLM_BASE_URL || "").replace(/\/+$/, "");
   if (adapter === "anthropic") return "claude";
   if (adapter === "google") return "gemini";
+  if (baseUrl === "https://api.openai.com/v1" && values.LLM_CLASSIFICATION_MODEL === "gpt-4.1-mini") return "codex";
   if (baseUrl === "https://api.deepseek.com") return "deepseek";
   if (baseUrl === "https://api.openai.com/v1") return "openai";
   if (baseUrl === "https://dashscope.aliyuncs.com/compatible-mode/v1") return "qwen";
