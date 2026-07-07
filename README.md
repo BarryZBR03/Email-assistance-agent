@@ -68,7 +68,7 @@ SMTP_AUTH_CODE=your-smtp-app-password
 LLM_API_KEY=your-llm-api-key
 ```
 
-Provider and model fields are optional. Leave them unset to use defaults, or set `LLM_PROVIDER` to an alias such as `codex`, `claude`, or `gemini` when you want a specific provider.
+Provider and model fields are optional. Leave them unset to use defaults, or set `LLM_PROVIDER` to an alias such as `codex`, `claude`, `gemini` or `deepseek` when you want a specific provider.
 
 Never commit `.env`, API keys, app passwords, logs, raw email content, or generated outputs.
 
