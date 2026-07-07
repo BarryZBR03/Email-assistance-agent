@@ -1,0 +1,1 @@
+"""Email draft agent package."""

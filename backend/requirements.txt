@@ -1,0 +1,6 @@
+fastapi>=0.110.0
+uvicorn[standard]>=0.27.0
+python-dotenv>=1.0.0
+-e ../email_summary_agent
+-e ../email_draft_agent
+pytest>=8.0.0

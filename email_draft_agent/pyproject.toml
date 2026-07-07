@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "email-draft-agent"
+version = "0.1.0"
+description = "Draft a sending email from a classified email JSON record using configurable LLM providers via LangChain."
+requires-python = ">=3.10"
+dependencies = [
+    "langchain-core==1.4.7",
+    "langchain-deepseek==1.1.0",
+    "langchain-openai>=1.0.0",
+    "langchain-anthropic>=1.0.0",
+    "langchain-google-genai>=4.0.0",
+    "python-dotenv>=1.0.0",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest>=8.0.0",
+]
+
+[project.scripts]
+email-draft-agent = "email_draft_agent.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

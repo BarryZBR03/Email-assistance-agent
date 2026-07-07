@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Email Assistance</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Email Assistance</p>
+          <h1>Task Console</h1>
+        </div>
+        <div class="header-actions">
+          <div class="status-strip">
+            <span id="healthDot" class="dot"></span>
+            <span id="healthText">Checking API</span>
+          </div>
+          <button id="settingsBtn" class="icon-button" type="button" title="Configuration" aria-label="Open configuration"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1A2 2 0 1 1 7.1 4l.1.1a1.7 1.7 0 0 0 1.9.3h.1a1.7 1.7 0 0 0 1-1.6V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.6h.1a1.7 1.7 0 0 0 1.9-.3l.1-.1A2 2 0 1 1 20 7.1l-.1.1a1.7 1.7 0 0 0-.3 1.9v.1a1.7 1.7 0 0 0 1.6 1h.1a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.6 1z"/></svg></button>
+        </div>
+      </header>
+
+      <section id="setupPanel" class="setup-panel hidden" aria-modal="true" role="dialog">
+        <div class="setup-dialog">
+          <div class="section-head">
+            <div>
+              <h2>Configuration</h2>
+              <p class="muted">Update mailbox and model settings. Saved secrets are never shown again.</p>
+            </div>
+            <div class="setup-head-actions">
+              <span id="setupStatus" class="pill">Not configured</span>
+              <button id="closeConfigBtn" class="icon-button" type="button" title="Close configuration" aria-label="Close configuration"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+            </div>
+          </div>
+          <div id="setupError" class="error-box hidden"></div>
+          <form id="configForm" class="config-form">
+            <fieldset class="config-section">
+              <legend>Account</legend>
+              <label>Email address<input name="EMAIL_ADDRESS" autocomplete="username" /></label>
+            </fieldset>
+
+            <fieldset class="config-section">
+              <legend>IMAP inbox</legend>
+              <div class="config-grid">
+                <label>IMAP host<input name="IMAP_HOST" placeholder="imap.example.com" /></label>
+                <label>IMAP port<input name="IMAP_PORT" inputmode="numeric" placeholder="993" /></label>
+                <label>IMAP auth code<input name="IMAP_AUTH_CODE" type="password" autocomplete="current-password" data-secret="IMAP_AUTH_CODE" /></label>
+                <label>Email status
+                  <select name="EMAIL_STATUS">
+                    <option value="unseen">Unseen</option>
+                    <option value="seen">Seen</option>
+                    <option value="all">All</option>
+                  </select>
+                </label>
+                <label>Recent days<input name="RECENT_DAYS" inputmode="numeric" placeholder="1" /></label>
+                <label class="wide-field">Allowed senders<input name="ALLOWED_SENDERS" placeholder="boss@example.com, alerts@example.com" /></label>
+              </div>
+              <p class="secret-hint" data-secret-status="IMAP_AUTH_CODE"></p>
+            </fieldset>
+
+            <fieldset class="config-section">
+              <legend>SMTP sending</legend>
+              <div class="config-grid">
+                <label>SMTP host<input name="SMTP_HOST" placeholder="smtp.example.com" /></label>
+                <label>SMTP port<input name="SMTP_PORT" inputmode="numeric" placeholder="465" /></label>
+                <label>SMTP auth code<input name="SMTP_AUTH_CODE" type="password" autocomplete="current-password" data-secret="SMTP_AUTH_CODE" /></label>
+              </div>
+              <p class="secret-hint" data-secret-status="SMTP_AUTH_CODE"></p>
+            </fieldset>
+
+            <fieldset class="config-section">
+              <legend>Email classification</legend>
+              <label>Email categories<input name="EMAIL_CATEGORIES" placeholder="important,work,personal,promotion,spam,other" /></label>
+            </fieldset>
+
+            <fieldset class="config-section">
+              <legend>Models</legend>
+              <div class="config-grid">
+                <label>Provider
+                  <select name="LLM_PROVIDER" id="llmProvider">
+                    <option value="deepseek">DeepSeek</option>
+                    <option value="openai">OpenAI</option>
+                    <option value="qwen">Qwen</option>
+                    <option value="kimi">Kimi</option>
+                    <option value="claude">Claude</option>
+                    <option value="gemini">Gemini</option>
+                    <option value="openai_compatible">Custom OpenAI-compatible</option>
+                  </select>
+                </label>
+                <label data-base-url-field>Base URL<input name="LLM_BASE_URL" placeholder="https://api.deepseek.com or OpenAI-compatible endpoint" /></label>
+                <label>Classification model<input name="LLM_CLASSIFICATION_MODEL" placeholder="deepseek-v4-flash" /></label>
+                <label>Summary model<input name="LLM_SUMMARY_MODEL" placeholder="deepseek-v4-pro" /></label>
+                <label>Draft model<input name="LLM_DRAFT_MODEL" placeholder="deepseek-v4-pro" /></label>
+                <label>Classification concurrency<input name="LLM_CLASSIFICATION_MAX_CONCURRENCY" inputmode="numeric" placeholder="1000" /></label>
+                <label>Draft concurrency<input name="LLM_DRAFT_MAX_CONCURRENCY" inputmode="numeric" placeholder="250" /></label>
+                <label class="wide-field">LLM API key<input name="LLM_API_KEY" type="password" autocomplete="off" data-secret="LLM_API_KEY" /></label>
+              </div>
+              <p class="secret-hint" data-secret-status="LLM_API_KEY"></p>
+            </fieldset>
+
+            <fieldset class="config-section">
+              <legend>Agent behavior</legend>
+              <label>Summary system prompt<textarea name="SUMMARY_SYSTEM_PROMPT" rows="4" placeholder="Leave blank to use the default summary prompt."></textarea></label>
+              <label>Draft system prompt<textarea name="DRAFT_SYSTEM_PROMPT" rows="4" placeholder="Leave blank to use the default draft prompt."></textarea></label>
+              <label>Draft personality<textarea name="DRAFT_PERSONALITY" rows="3" placeholder="Example: concise, warm, professional, and direct."></textarea></label>
+            </fieldset>
+          </form>
+          <div id="missingConfig" class="missing-list"></div>
+          <div class="action-row compact">
+            <button id="testImapBtn">Test IMAP</button>
+            <button id="testSmtpBtn">Test SMTP</button>
+            <button id="saveConfigBtn" class="primary">Save Configuration</button>
+          </div>
+        </div>
+      </section>
+
+      <div id="configNotice" class="config-notice hidden">Configuration required. Open settings to finish setup.</div>
+
+      <section class="action-row">
+        <button id="runSummaryBtn" class="primary">Run Summary Agent</button>
+        <button id="refreshBtn">Refresh Tasks</button>
+        <span id="busyText" class="busy"></span>
+      </section>
+
+      <section id="progressPanel" class="progress-panel hidden">
+        <div class="progress-meta">
+          <strong id="progressMessage">Working...</strong>
+          <span id="progressStage"></span>
+        </div>
+        <div class="progress-track"><div id="progressBar" class="progress-bar indeterminate"></div></div>
+      </section>
+      <div id="globalError" class="error-box hidden"></div>
+
+      <section class="workspace">
+        <aside id="taskSidebar" class="task-list" aria-label="Task navigation">
+          <button id="sidebarToggleBtn" class="sidebar-toggle" type="button" aria-label="Pin task sidebar open" aria-expanded="false" title="Pin task sidebar open">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h16"/></svg>
+            <span class="sidebar-toggle-text">Tasks</span>
+          </button>
+          <div class="sidebar-content">
+            <div class="section-head">
+              <h2>Tasks</h2>
+              <span id="taskCount">0</span>
+            </div>
+            <div id="tasks"></div>
+
+            <div class="section-head trash-head">
+              <h2>Trash</h2>
+              <span id="trashCount">0</span>
+            </div>
+            <div id="trashTasks" class="trash-list"></div>
+          </div>
+        </aside>
+
+        <section class="detail">
+          <div class="section-head selected-head">
+            <div>
+              <h2 id="selectedTitle">Select a task</h2>
+              <span id="selectedMeta"></span>
+            </div>
+            <button id="deleteTaskBtn" class="danger" disabled>Delete Task</button>
+          </div>
+
+          <div class="detail-grid">
+            <section class="panel viewer-panel">
+              <div class="panel-head">
+                <div>
+                  <div id="viewerLabel" class="module-label">Summary Email</div>
+                  <h3 id="viewerTitle">Generated Summary</h3>
+                </div>
+                <div class="viewer-toggle" role="group" aria-label="Select email detail view">
+                  <button id="summaryViewBtn" class="icon-button active" type="button" title="Show summary email" aria-label="Show summary email" aria-pressed="true">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14v16H5z"/><path d="M8 8h8"/><path d="M8 12h8"/><path d="M8 16h5"/></svg>
+                  </button>
+                  <button id="originalViewBtn" class="icon-button" type="button" title="Show original email" aria-label="Show original email" aria-pressed="false">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v12H4z"/><path d="m4 7 8 6 8-6"/></svg>
+                  </button>
+                </div>
+              </div>
+              <div id="summaryView">
+                <pre id="summaryPreview" class="markdown-preview">No task selected.</pre>
+              </div>
+              <div id="originalView" class="hidden">
+                <div id="originalEmailPreview" class="original-email empty-state">Select an email to view the original fetched message.</div>
+              </div>
+            </section>
+
+            <section class="panel fetched-panel">
+              <div class="panel-head">
+                <div>
+                  <div class="module-label">Fetch Email</div>
+                  <h3>Fetched Emails</h3>
+                </div>
+                <button id="generateDraftsBtn" class="primary" disabled>Generate Drafts</button>
+              </div>
+              <div id="draftError" class="error-box hidden"></div>
+              <div id="emailGroups" class="email-groups">No task selected.</div>
+            </section>
+          </div>
+
+          <section class="panel drafts-panel">
+            <h3>Drafts</h3>
+            <div id="draftPreview" class="draft-list">No drafts loaded.</div>
+          </section>
+        </section>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
